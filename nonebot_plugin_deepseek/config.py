@@ -153,6 +153,8 @@ class ScopedConfig(BaseModel):
     """Whether to send model thinking chain"""
     context_timeout: int = Field(default=50, gt=50)
     """Multi-round conversation timeout"""
+    is_stream: bool = False
+    """Whether to use stream mode"""
 
     def get_enable_models(self) -> list[str]:
         return [model.name for model in self.enable_models]
