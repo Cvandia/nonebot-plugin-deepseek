@@ -1,5 +1,6 @@
-import httpx
 import json
+
+import httpx
 from nonebot.log import logger
 
 from ..config import config
@@ -7,7 +8,7 @@ from ..compat import model_dump
 
 # from ..function_call import registry
 from ..exception import RequestException
-from ..schemas import Balance, ChatCompletions, Message, Choice, Usage
+from ..schemas import Usage, Choice, Balance, Message, ChatCompletions
 
 
 class API:
@@ -55,7 +56,7 @@ class API:
                         created=0,
                         choices=[
                             Choice(
-                                finish_reason=None,
+                                finish_reason="stop",
                                 index=0,
                                 message=Message(role="assistant", content=""),
                                 logprobs=None,
