@@ -50,7 +50,7 @@ __plugin_meta__ = PluginMetadata(
     extra={
         "unique_name": "DeepSeek",
         "author": "Komorebi <mute231010@gmail.com>",
-        "version": "0.1.5",
+        "version": "0.1.6",
     },
 )
 
@@ -113,7 +113,7 @@ deepseek.shortcut("设置默认模型", {"command": "deepseek model --set-defaul
 @deepseek.assign("balance")
 async def _(is_superuser: bool = Depends(SuperUser())):
     if not is_superuser:
-        return
+        await deepseek.finish("该指令仅超管可用")
     try:
         balances = await API.query_balance(model_config.default_model)
 
@@ -154,7 +154,7 @@ async def _(
     model: Query[str] = Query("model.set.model"),
 ):
     if not is_superuser:
-        return
+        await deepseek.finish("该指令仅超管可用")
     model_config.default_model = model.result
     model_config.save()
     await deepseek.finish(f"已设置默认模型为：{model.result}")
