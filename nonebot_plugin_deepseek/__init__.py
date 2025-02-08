@@ -24,7 +24,9 @@ from nonebot_plugin_alconna import (
     on_alconna,
 )
 
-if find_spec("nonebot_plugin_htmlrender"):
+from .config import Config, config, model_config
+
+if find_spec("nonebot_plugin_htmlrender") and config.md_to_pic:
     require("nonebot_plugin_htmlrender")
     from nonebot_plugin_htmlrender import md_to_pic as md_to_pic
 
@@ -36,8 +38,7 @@ from .apis import API
 from . import hook as hook
 from .utils import DeepSeekHandler
 from .exception import RequestException
-from .extension import CleanDocExtension
-from .config import Config, config, model_config
+from .extension import ParseExtension, CleanDocExtension
 
 __plugin_meta__ = PluginMetadata(
     name="DeepSeek",
@@ -50,12 +51,10 @@ __plugin_meta__ = PluginMetadata(
     extra={
         "unique_name": "DeepSeek",
         "author": "Komorebi <mute231010@gmail.com>",
-        "version": "0.1.6",
+        "version": "0.1.7",
     },
 )
 
-if not config.md_to_pic:
-    is_to_pic = False
 
 ns = Namespace("deepseek", disable_builtin_options=set())
 alc_config.namespaces["deepseek"] = ns
@@ -100,7 +99,7 @@ deepseek = on_alconna(
     use_cmd_start=True,
     skip_for_unmatch=False,
     comp_config={"lite": True},
-    extensions=[ReplyMergeExtension, CleanDocExtension],
+    extensions=[ReplyMergeExtension, CleanDocExtension, ParseExtension],
 )
 
 deepseek.shortcut("多轮对话", {"command": "deepseek --with-context", "fuzzy": True, "prefix": True})
